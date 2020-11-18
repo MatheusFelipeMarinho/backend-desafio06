@@ -16,6 +16,7 @@ interface CSVTransaction {
   value: number;
   category: string;
 }
+
 class ImportTransactionsService {
   async execute(filePath: string): Promise<Transaction[]> {
 
@@ -43,11 +44,10 @@ class ImportTransactionsService {
       if (!title || !type || !value) return;
 
       categories.push(category);
-      transactions.push(title, type, value);
-
+      transactions.push({ title, type, value, category });
     });
 
-    await new Promise(resolve => parseCSV.on('end', resolve))
+    await new Promise(resolve => parseCSV.on('end', resolve));
 
     const exitentsCategories = await categoryRepository.find({
       where: {
